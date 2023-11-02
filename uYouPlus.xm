@@ -130,6 +130,20 @@ static void repositionCreateTab(YTIGuideResponse *response) {
 }
 %end
 
+// Fix uYou crashing in YouTube 18.43.4 and higher
+// uYouCrashFix - https://github.com/iCrazeiOS/uYouCrashFix
+%hook YTPlayerViewController
+%new
+-(float)currentPlaybackRateForVarispeedSwitchController:(id)arg1 {
+	return [[self activeVideo] playbackRate];
+}
+
+%new
+-(void)varispeedSwitchController:(id)arg1 didSelectRate:(float)arg2 {
+	[[self activeVideo] setPlaybackRate:arg2];
+}
+%end
+
 # pragma mark - Tweaks
 // IAmYouTube - https://github.com/PoomSmart/IAmYouTube/
 %hook YTVersionUtils
